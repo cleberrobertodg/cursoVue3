@@ -1,15 +1,41 @@
 {
   "ingredientes": {
     "batatas": [
-    {
-      "id": 1,
-      "tipo": "Simples"
-    },
-    {
-      "id": 2,
-      "tipo": "Cheddar e bacon"
-    }    
-  ],
+      {
+        "id": 1,
+        "tipo": "Simples"
+      },
+      {
+        "id": 2,
+        "tipo": "Cheddar e bacon"
+      }
+    ],
+    "bebidas": [
+      {
+        "id": 1,
+        "tipo": "Coca-Cola"
+      },
+      {
+        "id": 2,
+        "tipo": "Fanta"
+      },
+      {
+        "id": 3,
+        "tipo": "Guaraná"
+      },
+      {
+        "id": 4,
+        "tipo": "Sprite"
+      },
+      {
+        "id": 5,
+        "tipo": "Suco de Uva"
+      },
+      {
+        "id": 6,
+        "tipo": "Suco de Laranja"
+      }
+    ],
     "paes": [
       {
         "id": 1,
@@ -99,5 +125,18 @@
       "tipo": "Finalizado"
     }
   ],
-  "burgers": []
+  "burgers": [
+    {
+      "id": "3559",
+      "nome": "Teste timer",
+      "carne": "Veggie burger",
+      "pao": "Australiano",
+      "batata": "Cheddar e bacon",
+      "bebida": "Fanta",
+      "opcionais": [
+        "Tomate"
+      ],
+      "status": "Solicitado"
+    }
+  ]
 }

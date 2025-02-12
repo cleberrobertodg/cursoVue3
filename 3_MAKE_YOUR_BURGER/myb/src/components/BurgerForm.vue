@@ -1,11 +1,18 @@
 <template>
     <div>
-        <p>Componente de mensagem</p>
+        <Message :msg="msg" v-show="msg" />
         <div>
             <form id="burger-form" @submit="createBurger">
                 <div class="input-container">
                     <label for="nome">Nome do Cliente:</label>
                     <input type="text" id="nome" name="nome" v-model="nome" placeholder="Digite o seu nome">
+                </div>
+                <div class="input-container">
+                    <label for="bebida">Escolha a bebida:</label>
+                    <select name="bebida" id="bebida" v-model="bebida">
+                        <option value="">Selecione a sua bebida</option>
+                        <option v-for="bebida in bebidas" :key="bebida.id" :value="bebida.tipo">{{ bebida.tipo }}</option>
+                    </select>
                 </div>
                 <div class="input-container">
                     <label for="batata">Escolha a batata:</label>
@@ -45,6 +52,8 @@
 </template>
 
 <script>
+import Message from './Message';
+
     export default{
         name: "BurgerForm ",
         data(){
@@ -53,11 +62,13 @@
                 carnes: null,
                 opcionaisdata: null,
                 batatas: null,
+                bebidas: null,
                 nome: null,
                 pao: null,
                 carne: null,
                 opcionais: [],
                 batata: null,
+                bebida: null,
                 msg: null
             }
         },
@@ -71,6 +82,7 @@
                 this.carnes = data.carnes
                 this.opcionaisdata = data.opcionais
                 this.batatas = data.batatas
+                this.bebidas = data.bebidas
 
             },
             async createBurger(e){
@@ -82,6 +94,7 @@
                     carne: this.carne,
                     pao: this.pao,
                     batata: this.batata,
+                    bebida: this.bebida,
                     opcionais: Array.from(this.opcionais),
                     status: "Solicitado"
                 }
@@ -96,12 +109,27 @@
 
                 const res  = await req.json();
 
-                console.log(res)
+                //coloca msg no sistema
+                this.msg = `Pedido N° ${res.id} realizado com sucesso`
+
+                // Limpa o formulário
+                this.nome = "";
+                this.carne = "";
+                this.pao = "";
+                this.batata = "";
+                this.bebida = "";
+                this.opcionais = [];
+
+                //Limpa msg
+                setTimeout(()=> this.msg = "", 3000)
 
             }
         },
         mounted(){
             this.getIngredientes()
+        },
+        components: {
+            Message
         }
     }
 </script>
