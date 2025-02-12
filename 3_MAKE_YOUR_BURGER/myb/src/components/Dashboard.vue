@@ -1,8 +1,9 @@
 <template>
     <div id="burger-table">
+        <Message :msg="msg" v-show="msg" />
         <div>
             <div id="burger-table-heading">
-                <div class="order id">#:</div>
+                <div class="order id">N° Pedido:</div>
                 <div>Cliente:</div>
                 <div>Bebida:</div>
                 <div>Batata:</div>
@@ -13,53 +14,114 @@
             </div>
         </div>
         <div id="burger-table-rows">
-            <div class="burger-table-row">
-                <div class="order-number">1</div>
-                <div>Cleber</div>
-                <div>Coca-Cola</div>
-                <div>Cheddar e Bacon</div>
-                <div>Gergelim</div>
-                <div>Costela</div>
+            <div class="burger-table-row" v-for="burger in burgers" :key="burger.id">
+                <div class="order-number">{{ burger.id }}</div>
+                <div>{{ burger.nome }}</div>
+                <div>{{ burger.bebida }}</div>
+                <div>{{ burger.batata }}</div>
+                <div>{{ burger.pao }}</div>
+                <div>{{ burger.carne }}</div>
                 <div>
                     <ul>
-                        <li>Picles</li>
-                        <li>Tomate</li>
+                        <li v-for="(opcional, index) in burger.opcionais" :key="index">{{ opcional }}</li>
                     </ul>
                 </div>
                 <div class="selects">
-                    <select name="status" class="status">
+                    <select name="status" class="status" @change="updateBurger($event, burger.id)">
                         <option value="">Selecione</option>
+                        <option v-for="s in status" :key="s.id" :value="s.tipo" :selected="burger.status == s.tipo">{{ s.tipo }}</option>
                     </select>
-                    <button class="delete-btn">Cancelar</button>
+                    <button class="delete-btn" @click="deleteBurger(burger.id)">Cancelar</button>
                 </div>
             </div>
-            <div class="burger-table-row">
-                <div class="order-number">1</div>
-                <div>Cleber</div>
-                <div>Coca-Cola</div>
-                <div>Cheddar e Bacon</div>
-                <div>Gergelim</div>
-                <div>Costela</div>
-                <div>
-                    <ul>
-                        <li>Picles</li>
-                        <li>Tomate</li>
-                    </ul>
-                </div>
-                <div class="selects">
-                    <select name="status" class="status">
-                        <option value="">Selecione</option>
-                    </select>
-                    <button class="delete-btn">Cancelar</button>
-                </div>
-            </div>
+            
         </div>
     </div>
 </template>
 
 <script>
+import Message from './Message';
 export default {
-    name: "Dashboard"
+    name: "Dashboard",
+    data(){
+        return{
+            burgers: null,
+            burger_id: null,
+            status: [],
+            msg: null
+        }
+    },
+    components: {
+        Message
+    },
+    methods: {
+        async getPedidos(){
+
+            const req = await fetch("http://localhost:3000/burgers");
+
+            const data = await req.json();
+
+            this.burgers = data;
+
+            
+
+            //Resgatar os status
+            this.getStatus()
+        },
+
+        async getStatus(){
+
+            const req = await fetch("http://localhost:3000/status");
+
+            const data = await req.json();
+
+            this.status = data;
+
+            
+
+        },
+        async deleteBurger(id){
+            const req = await fetch(`http://localhost:3000/burgers/${id}`, {
+            method: "DELETE"});
+            const res = await req.json();
+
+            //coloca msg no sistema
+            this.msg = `Pedido N° ${res.id} removido com sucesso!`
+            
+            //Limpa msg
+            setTimeout(()=> this.msg = "", 3000)
+
+            //Msg de delete do pedido
+
+            this.getPedidos();
+        },
+        async updateBurger(event, id) {
+
+            const option = event.target.value;
+
+            const dataJson = JSON.stringify({status: option});
+
+            const req = await fetch(`http://localhost:3000/burgers/${id}`, {
+                method: "PATCH",
+                headers: {"Content-Type": "application/json"},
+                body: dataJson
+            });
+
+            const res = await req.json();
+
+            //coloca msg no sistema
+            this.msg = `O pedido N° ${res.id} foi atualizado para: ${res.status}!`
+            
+            //Limpa msg
+            setTimeout(()=> this.msg = "", 3000)
+
+            console.log(res)
+
+        }
+    },
+    mounted(){
+        this.getPedidos();
+    }
 }
 </script>
 
@@ -79,18 +141,18 @@ export default {
 
     #burger-table-heading{
         font-weight: bold;
-        padding: 12px;
         border-bottom: 3px solid #333;
     }
 
     #burger-table-heading div,
     .burger-table-row div{
         width: 10%;
+        margin: 10px;
     }
 
     .burger-table-row{
         width: 100%;
-        padding: 12px;
+        padding-top: 12px;
         border-bottom: 1px solid #ccc;
     }
 
@@ -102,6 +164,7 @@ export default {
     .selects{
         display: flex;
         flex-direction: row;
+        max-height: 40px;
     }
 
     select{
@@ -126,5 +189,8 @@ export default {
         background-color: transparent;
     }
 
-    
+    .burger-table-row ul{
+        list-style: none;
+    }
+
 </style>

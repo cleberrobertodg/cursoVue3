@@ -111,6 +111,8 @@ import Message from './Message';
 
                 //coloca msg no sistema
                 this.msg = `Pedido N° ${res.id} realizado com sucesso`
+                //Limpa msg
+                setTimeout(()=> this.msg = "", 3000)
 
                 // Limpa o formulário
                 this.nome = "";
@@ -120,8 +122,7 @@ import Message from './Message';
                 this.bebida = "";
                 this.opcionais = [];
 
-                //Limpa msg
-                setTimeout(()=> this.msg = "", 3000)
+                
 
             }
         },

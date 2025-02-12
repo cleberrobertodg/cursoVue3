@@ -127,16 +127,18 @@
   ],
   "burgers": [
     {
-      "id": "3559",
-      "nome": "Teste timer",
+      "id": "cf9c",
+      "nome": "Binho",
       "carne": "Veggie burger",
-      "pao": "Australiano",
-      "batata": "Cheddar e bacon",
-      "bebida": "Fanta",
+      "pao": "Integral",
+      "batata": "Simples",
+      "bebida": "Suco de Laranja",
       "opcionais": [
-        "Tomate"
+        "Tomate",
+        "Cebola roxa",
+        "Alface americana"
       ],
-      "status": "Solicitado"
+      "status": ""
     }
   ]
 }
